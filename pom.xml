@@ -63,8 +63,18 @@
         <groupId>io.quarkus</groupId>
         <artifactId>quarkus-resteasy-jsonb</artifactId>
     </dependency>
-
-
+    <dependency>
+        <groupId>io.confluent</groupId>
+        <artifactId>kafka-avro-serializer</artifactId>
+        <version>6.1.1</version>
+        <exclusions>
+            <exclusion>
+                <groupId>jakarta.ws.rs</groupId>
+                <artifactId>jakarta.ws.rs-api</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+<!--
     <dependency>
       <groupId>io.apicurio</groupId>
       <artifactId>apicurio-registry-utils-serde</artifactId>
@@ -76,7 +86,7 @@
         </exclusion>
       </exclusions>
     </dependency>
-
+-->
 
   </dependencies>
   <build>
@@ -188,4 +198,13 @@
       </properties>
     </profile>
   </profiles>
+<repositories>
+    <repository>
+        <id>confluent</id>
+        <url>https://packages.confluent.io/maven/</url>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+    </repository>
+</repositories>  
 </project>

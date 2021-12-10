@@ -4,5 +4,6 @@
         "src/main/resources",
         "src/main/java",
         "src/test/java"
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
