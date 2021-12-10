@@ -1,0 +1,17 @@
+[
+{
+    "type": "record",
+    "name": "GenericLocation",
+    "namespace": "de.witcom.test.schema.avro.location",
+    "fields": [
+      {
+        "name": "loc_id",
+        "type": "string"
+      },
+      {
+        "name": "name",
+        "type": "string"
+      }
+    ]
+  }
+]
