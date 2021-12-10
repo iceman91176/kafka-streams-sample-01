@@ -1,5 +1,5 @@
 ---
-version: '2'
+version: '3'
 
 services:
   app:
@@ -14,6 +14,8 @@ services:
         INSTALL_GRADLE: false
         NODE_VERSION": "none"
     volumes:
+      # Forwards the local Docker socket to the container.
+      - /var/run/docker.sock:/var/run/docker-host.sock     
       # This is where VS Code should expect to find your project's source code and the value of "workspaceFolder" in .devcontainer/devcontainer.json
       - ..:/workspace:cached
 
