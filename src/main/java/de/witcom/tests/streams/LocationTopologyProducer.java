@@ -60,9 +60,16 @@ public class LocationTopologyProducer {
         KTable<String, GenericLocationContact> locationContacts = builder.table(locationContactTopic, Consumed.with(Serdes.String(), locationContactSerde));
         KTable<String, GenericContact> contacts = builder.table(contactTopic, Consumed.with(Serdes.String(), contactSerde));
 
+        locationContacts.join(contacts,this::extractKey,this::toGenericLocationContactEnriched).toStream().peek((k,v) -> {
+            //LOGGER.infof("Joined loccontact and Contact to %s %s", k,v.toString());
+            LOGGER.infof("Joined loccontact and Contact on key %s ", k);
+        }).to("intermediate-topic", Produced.with(Serdes.String(),imSerde));
+
+        /*
         locationContacts.join(contacts, this::toGenericLocationContactEnriched).toStream().peek((k,v) -> {
             LOGGER.infof("Joined loccontact and Contact to %s %s", k,v.toString());
         }).to("intermediate-topic", Produced.with(Serdes.String(),imSerde));
+        */
 
         return builder.build();
 
@@ -90,9 +97,15 @@ public class LocationTopologyProducer {
         return specificAvroSerde;
     }
     
+    private String extractKey(GenericLocationContact locContact){
+        LOGGER.infof("Extract contact-id %s", locContact.getContactId());
+        return locContact.getContactId().toString();
+    }
     
     private GenericLocationContactEnriched toGenericLocationContactEnriched(GenericLocationContact locContact,GenericContact contact){
 
+        LOGGER.infof("Location Id in loc-contact", locContact.getLocId());
+        LOGGER.infof("Contact-Name in contact", contact.getName().toString());
         return GenericLocationContactEnriched.newBuilder()
         .setId(locContact.getId())
         .setLocId(locContact.getLocId())
