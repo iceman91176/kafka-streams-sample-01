@@ -20,7 +20,7 @@
 	//"runArgs": ["--network=confluent-platform_default"],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+	"forwardPorts": [8081,8080,29092],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "java -version",
