@@ -1,5 +1,13 @@
 # kafka-streams-sample Project
 
+## Create Kafka Topics
+```shell script
+kafka-topics --bootstrap-server broker:9092 --create --topic generic-location --replication-factor 1 --partitions 1 --config "cleanup.policy=compact" --config "delete.retention.ms=1000"
+kafka-topics --bootstrap-server broker:9092 --create --topic generic-location-contact --replication-factor 1 --partitions 1 --config "cleanup.policy=compact" --config "delete.retention.ms=1000"
+kafka-topics --bootstrap-server broker:9092 --create --topic generic-contact --replication-factor 1 --partitions 1 --config "cleanup.policy=compact" --config "delete.retention.ms=1000"
+```
+
+
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .

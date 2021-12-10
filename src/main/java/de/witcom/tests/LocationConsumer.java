@@ -7,7 +7,7 @@ import de.witcom.test.schema.avro.location.GenericLocation;
 
 import javax.enterprise.context.ApplicationScoped;
 
-@ApplicationScoped
+//@ApplicationScoped
 public class LocationConsumer {
 
     private static final Logger LOGGER =
