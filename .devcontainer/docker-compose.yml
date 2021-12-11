@@ -57,6 +57,8 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_TOOLS_LOG4J_LOGLEVEL: ERROR
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
 
   schema-registry:
     image: confluentinc/cp-schema-registry:6.2.1
@@ -70,3 +72,41 @@ services:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'broker:9092'
       SCHEMA_REGISTRY_LOG4J_ROOT_LOGLEVEL: WARN
+
+  primary-ksqldb-server:
+    image: ${KSQL_IMAGE_BASE}confluentinc/ksqldb-server:latest
+    hostname: primary-ksqldb-server
+    container_name: primary-ksqldb-server
+    depends_on:
+      - broker
+      - schema-registry
+    ports:
+      - "8088:8088"
+    environment:
+      KSQL_LISTENERS: http://0.0.0.0:8088
+      KSQL_BOOTSTRAP_SERVERS: broker:9092
+      KSQL_KSQL_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: "true"
+      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: "true"
+
+  additional-ksqldb-server:
+    image: ${KSQL_IMAGE_BASE}confluentinc/ksqldb-server:latest
+    hostname: additional-ksqldb-server
+    depends_on:
+      - primary-ksqldb-server
+    ports:
+      - "8090"
+    environment:
+      KSQL_LISTENERS: http://0.0.0.0:8090
+      KSQL_BOOTSTRAP_SERVERS: broker:9092
+      KSQL_KSQL_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+
+  # Access the cli by running:
+  # > docker-compose exec ksqldb-cli  ksql http://primary-ksqldb-server:8088
+  ksqldb-cli:
+    image: ${KSQL_IMAGE_BASE}confluentinc/ksqldb-cli:latest
+    container_name: ksqldb-cli
+    depends_on:
+      - primary-ksqldb-server
+    entrypoint: /bin/sh
+    tty: true

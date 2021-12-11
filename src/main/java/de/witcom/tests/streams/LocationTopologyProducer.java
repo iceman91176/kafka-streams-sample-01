@@ -63,6 +63,9 @@ public class LocationTopologyProducer {
         locationContacts.join(contacts,this::extractKey,this::toGenericLocationContactEnriched).toStream().peek((k,v) -> {
             //LOGGER.infof("Joined loccontact and Contact to %s %s", k,v.toString());
             LOGGER.infof("Joined loccontact and Contact on key %s ", k);
+            if(v!=null){
+                LOGGER.infof("Joined loccontact and Contact to %s %s", k,v.toString());
+            }
         }).to("intermediate-topic", Produced.with(Serdes.String(),imSerde));
 
         /*
@@ -100,7 +103,7 @@ public class LocationTopologyProducer {
     private String extractKey(GenericLocationContact locContact){
         LOGGER.infof("Extract contact-id %s", locContact.getContactId());
         return locContact.getContactId().toString();
-    }
+    } 
     
     private GenericLocationContactEnriched toGenericLocationContactEnriched(GenericLocationContact locContact,GenericContact contact){
 

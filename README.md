@@ -2,15 +2,15 @@
 
 ## Create Kafka Topics
 ```shell script
-kafka-topics --bootstrap-server broker:9092 --create --topic generic-location --replication-factor 1 --partitions 1 --config "cleanup.policy=compact" --config "delete.retention.ms=1000"
-kafka-topics --bootstrap-server broker:9092 --create --topic generic-location-contact --replication-factor 1 --partitions 1 --config "cleanup.policy=compact" --config "delete.retention.ms=1000"
-kafka-topics --bootstrap-server broker:9092 --create --topic generic-contact --replication-factor 1 --partitions 1 --config "cleanup.policy=compact" --config "delete.retention.ms=1000"
+docker exec -i broker /usr/bin/kafka-topics --bootstrap-server broker:9092 --create --topic generic_location --replication-factor 1 --partitions 1 --config "cleanup.policy=compact" --config "delete.retention.ms=1000"
+docker exec -i broker kafka-topics --bootstrap-server broker:9092 --create --topic generic_location_contact --replication-factor 1 --partitions 1 --config "cleanup.policy=compact" --config "delete.retention.ms=1000"
+docker exec -i broker kafka-topics --bootstrap-server broker:9092 --create --topic generic_contact --replication-factor 1 --partitions 1 --config "cleanup.policy=compact" --config "delete.retention.ms=1000"
 ```
 
 ## Produce Data
 
 ```shell script
-docker exec -i schema-registry /usr/bin/kafka-avro-console-producer --topic generic-location --bootstrap-server broker:9092 \
+docker exec -i schema-registry /usr/bin/kafka-avro-console-producer --topic generic_location --bootstrap-server broker:9092 \
   --property "parse.key=true"\
   --property 'key.schema={"type":"string"}'\
   --property "key.separator=:"\
@@ -20,7 +20,7 @@ docker exec -i schema-registry /usr/bin/kafka-avro-console-producer --topic gene
 ```
 
 ```shell script
-docker exec -i schema-registry /usr/bin/kafka-avro-console-producer --topic generic-contact --bootstrap-server broker:9092   --property "parse.key=true"  --property 'key.schema={"type":"string"}'  --property "key.separator=:"  --property value.schema="$(< src/main/resources/avro/generic-contact.avsc)"
+docker exec -i schema-registry /usr/bin/kafka-avro-console-producer --topic generic_contact --bootstrap-server broker:9092   --property "parse.key=true"  --property 'key.schema={"type":"string"}'  --property "key.separator=:"  --property value.schema="$(< src/main/resources/avro/generic-contact.avsc)"
 "contact-1":{"de.witcom.test.schema.avro.location.GenericContact":{"contact_id": "contact-1", "name": "WiTCOM","first_name":null}}
 "contact-2":{"de.witcom.test.schema.avro.location.GenericContact":{"contact_id": "contact-2", "name": "ESWE","first_name":null}}
 "contact-3":{"de.witcom.test.schema.avro.location.GenericContact":{"contact_id": "contact-3", "name": "Test GmbH 2","first_name":null}}
