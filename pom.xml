@@ -17,6 +17,8 @@
     <quarkus.platform.version>2.5.1.Final</quarkus.platform.version>
     <avro.version>1.10.1</avro.version>
     <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
+    <org.projectlombok.version>1.18.20</org.projectlombok.version>
+    <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -80,7 +82,29 @@
         <groupId>io.confluent</groupId>
         <artifactId>kafka-streams-avro-serde</artifactId>
         <version>6.1.1</version>
-    </dependency>       
+    </dependency>  
+
+    <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-streams-test-utils</artifactId>
+        <!--
+        <version>2.5.0</version>
+        -->
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest</artifactId>
+        <version>2.2</version>
+    </dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${org.projectlombok.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
 <!--
     <dependency>
       <groupId>io.apicurio</groupId>
@@ -155,6 +179,31 @@
         <version>${compiler-plugin.version}</version>
         <configuration>
           <parameters>${maven.compiler.parameters}</parameters>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>          
+          <annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${org.projectlombok.version}</version>
+						</path>
+						<!-- This is needed when using Lombok 1.18.16 and above -->
+            <!--
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok-mapstruct-binding</artifactId>
+							<version>0.2.0</version>
+						</path>
+            -->
+						<!-- Mapstruct should follow the lombok path(s) -->
+            <!--
+						<path>
+							<groupId>org.mapstruct</groupId>
+							<artifactId>mapstruct-processor</artifactId>
+							<version>${org.mapstruct.version}</version>
+						</path>
+            -->
+					</annotationProcessorPaths>
         </configuration>
       </plugin>
       <plugin>
